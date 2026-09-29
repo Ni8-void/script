@@ -563,9 +563,9 @@ if showLiquidityLabels and liquiditySweepLow
 if showLiquidityLabels and liquiditySweepHigh
     f_keepLabel(structureLabels, label.new(bar_index, high, "SWEEP H", style=label.style_label_down, color=color.new(color.orange, 0), textcolor=color.black, size=size.tiny), maxStructureLabels)
 if showLiquidityLabels and equalLowEvent and barstate.isconfirmed
-    f_keepLabel(structureLabels, label.new(bar_index - swingPivotLength, swingPivotLow, "EQL", style=label.style_label_up, color=color.new(color.blue, 25), textcolor=color.white, size=size.tiny), maxStructureLabels)
+    f_keepLabel(structureLabels, label.new(bar_index, swingPivotLow, "EQL", style=label.style_label_up, color=color.new(color.blue, 25), textcolor=color.white, size=size.tiny), maxStructureLabels)
 if showLiquidityLabels and equalHighEvent and barstate.isconfirmed
-    f_keepLabel(structureLabels, label.new(bar_index - swingPivotLength, swingPivotHigh, "EQH", style=label.style_label_down, color=color.new(color.blue, 25), textcolor=color.white, size=size.tiny), maxStructureLabels)
+    f_keepLabel(structureLabels, label.new(bar_index, swingPivotHigh, "EQH", style=label.style_label_down, color=color.new(color.blue, 25), textcolor=color.white, size=size.tiny), maxStructureLabels)
 
 bool inAsia = useSessions and not na(time(timeframe.period, asiaSession, sessionTimezone))
 bool inLondon = useSessions and not na(time(timeframe.period, londonSession, sessionTimezone))
@@ -652,7 +652,7 @@ bool nyContinuationDown = useSessions and inNewYork and londonBreakDirection == 
 bool nyReversal = useSessions and inNewYork and ((londonBreakDirection == 1 and close < asiaHigh) or (londonBreakDirection == -1 and close > asiaLow))
 bool bullishSessionConfluence = useSessions and (londonBreakUp or nyContinuationUp)
 bool bearishSessionConfluence = useSessions and (londonBreakDown or nyContinuationDown)
-string sessionStatus = not useSessions ? "DISABLED" : inAsia ? "ASIA RANGE" : londonBreakUp ? "LONDON BREAKOUT UP" : londonBreakDown ? "LONDON BREAKOUT DOWN" : (londonFakeUp or londonFakeDown) ? "SESSION CHOP" : nyReversal ? "NY REVERSAL" : nyContinuationUp or nyContinuationDown ? "NY CONTINUATION" : inCustom ? "CUSTOM SESSION" : "SESSION CHOP"
+string sessionStatus = not useSessions ? "DISABLED" : inAsia ? "ASIA RANGE" : londonBreakUp ? "LONDON BREAKOUT UP" : londonBreakDown ? "LONDON BREAKOUT DOWN" : (londonFakeUp or londonFakeDown) ? "SESSION CHOP" : inLondon and londonBreakDirection == 1 ? "LONDON BREAKOUT UP" : inLondon and londonBreakDirection == -1 ? "LONDON BREAKOUT DOWN" : nyReversal ? "NY REVERSAL" : nyContinuationUp or nyContinuationDown ? "NY CONTINUATION" : inCustom ? "CUSTOM SESSION" : "SESSION CHOP"
 
 if not showSessionBoxes
     if not na(asiaRangeBox)
